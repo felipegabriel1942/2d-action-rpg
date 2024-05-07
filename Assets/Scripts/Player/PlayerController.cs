@@ -11,11 +11,13 @@ public class PlayerController : MonoBehaviour
     private Vector2 movement;
     private Rigidbody2D rb;
     private Animator myAnimator;
+    private SpriteRenderer mySpriteRenderer;
 
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
         playerControls = new PlayerControls();
         myAnimator = GetComponent<Animator>();
+        mySpriteRenderer = GetComponent<SpriteRenderer>();
     }
 
 
@@ -36,6 +38,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate() {
         Move();
+        AdjustPlayerFacingDirection();
     }
 
     private void OnEnable() {
@@ -44,5 +47,13 @@ public class PlayerController : MonoBehaviour
 
     private void Move() {
         rb.MovePosition(rb.position + movement * (moveSpeed * Time.fixedDeltaTime));
+    }
+
+    private void AdjustPlayerFacingDirection() {
+        if (movement.x < 0) {
+            mySpriteRenderer.flipX = true; 
+        } else if (movement.x > 0) {
+            mySpriteRenderer.flipX = false;
+        }
     }
 }
