@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
     private void PlayerInput() {
         movement = playerControls.Movement.Move.ReadValue<Vector2>();
         myAnimator.SetFloat("moveX", movement.x);
+        myAnimator.SetFloat("moveY", movement.y);
     }
 
     private void FixedUpdate() {
