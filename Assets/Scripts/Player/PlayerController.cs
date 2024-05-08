@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -12,6 +14,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Animator myAnimator;
     private SpriteRenderer mySpriteRenderer;
+    private bool isAttacking = false;
 
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
@@ -25,8 +28,8 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Attack() {
-        print("Attacked!!!!");
         myAnimator.SetTrigger("Attack");
+        isAttacking = true;
     }
 
     void Update() {
@@ -35,8 +38,13 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerInput() {
         movement = playerControls.Movement.Move.ReadValue<Vector2>();
-        myAnimator.SetFloat("moveX", movement.x);
-        myAnimator.SetFloat("moveY", movement.y);
+
+        SetAnimatorMoveParams(isAttacking ? null : movement);
+    }
+
+    private void SetAnimatorMoveParams(Vector2? movement) {
+        myAnimator.SetFloat("moveX", movement.HasValue ? movement.Value.x : 0);
+        myAnimator.SetFloat("moveY", movement.HasValue ? movement.Value.y : 0);
     }
 
     private void FixedUpdate() {
@@ -49,6 +57,8 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Move() {
+        if (isAttacking) return;
+
         rb.MovePosition(rb.position + movement * (moveSpeed * Time.fixedDeltaTime));
     }
 
@@ -58,5 +68,9 @@ public class PlayerController : MonoBehaviour
         } else if (movement.x > 0) {
             mySpriteRenderer.flipX = false;
         }
+    }
+
+    public void DoneAttackingAnimEvent() {
+        isAttacking = false;
     }
 }
