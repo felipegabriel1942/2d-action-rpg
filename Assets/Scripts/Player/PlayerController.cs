@@ -20,13 +20,15 @@ public class PlayerController : MonoBehaviour
         mySpriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-
-    // Start is called before the first frame update
     void Start() {
-        
+        playerControls.Combat.Attack.started += _ => Attack();
     }
 
-    // Update is called once per frame
+    private void Attack() {
+        print("Attacked!!!!");
+        myAnimator.SetTrigger("Attack");
+    }
+
     void Update() {
         PlayerInput();
     }
