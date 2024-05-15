@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
 {
 
     [SerializeField] private float moveSpeed = 1f;
+    [SerializeField] private Transform weaponCollider;
 
     private PlayerControls playerControls;
     private Vector2 movement;
@@ -28,7 +29,9 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Attack() {
+        print("Ola");
         myAnimator.SetTrigger("Attack");
+        weaponCollider.gameObject.SetActive(true);
         isAttacking = true;
     }
 
@@ -72,5 +75,6 @@ public class PlayerController : MonoBehaviour
 
     public void DoneAttackingAnimEvent() {
         isAttacking = false;
+        weaponCollider.gameObject.SetActive(false);
     }
 }
