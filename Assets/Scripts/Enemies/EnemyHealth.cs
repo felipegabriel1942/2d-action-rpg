@@ -9,19 +9,27 @@ public class EnemyHealth : MonoBehaviour
 
     private int currentHealth;
 
+    private Animator myAnimator;
+
     void Start(){
         currentHealth = startingHealth;
+        myAnimator = GetComponent<Animator>();
     }
 
 
     public void TakeDamage(int damage) {
         currentHealth -= damage;
-        DetectDeath();
+
+        if (currentHealth > 0) {
+            myAnimator.SetTrigger("Hit");
+        } else {
+            myAnimator.SetTrigger("Death");
+            StartCoroutine(DestroyRoutine());
+        }
     }
 
-    private void DetectDeath() {
-        if (currentHealth <= 0) {
-            Destroy(gameObject);
-        }
+    private IEnumerator DestroyRoutine() {
+        yield return new WaitForSeconds(1);
+        Destroy(gameObject);
     }
 }
